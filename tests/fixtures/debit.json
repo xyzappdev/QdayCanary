@@ -1,0 +1,25 @@
+{
+  "slot": 300000500,
+  "blockTime": 1760086400,
+  "meta": {
+    "err": null,
+    "fee": 5000,
+    "preBalances": [1000000000, 0, 1],
+    "postBalances": [0, 999995000, 1],
+    "innerInstructions": []
+  },
+  "transaction": {
+    "signatures": ["deathSig111111111111111111111111111111111111111111111111111111111111111111111111111"],
+    "message": {
+      "accountKeys": [
+        { "pubkey": "AHiGL7feQqEko3yiDNCi7LJEviQKRbsT7joWn29zym9g", "signer": true, "writable": true, "source": "transaction" },
+        { "pubkey": "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB4T", "signer": false, "writable": true, "source": "transaction" },
+        { "pubkey": "11111111111111111111111111111111", "signer": false, "writable": false, "source": "transaction" }
+      ],
+      "instructions": [
+        { "program": "system", "programId": "11111111111111111111111111111111", "stackHeight": null,
+          "parsed": { "type": "transfer", "info": { "source": "AHiGL7feQqEko3yiDNCi7LJEviQKRbsT7joWn29zym9g", "destination": "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB4T", "lamports": 999995000 } } }
+      ]
+    }
+  }
+}

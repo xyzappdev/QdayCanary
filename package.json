@@ -1,0 +1,33 @@
+{
+  "name": "qday-canary",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit",
+    "test:rpc": "vitest run --config vitest.rpc.config.mts",
+    "verify": "node verify.mjs",
+    "shots": "node scripts/shots.mjs"
+  },
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/global-config": "^1.5.1",
+    "next": "^16.4.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "server-only": "^0.0.1"
+  },
+  "devDependencies": {
+    "@noble/curves": "^2.4.0",
+    "@solana/web3.js": "^1.99.0",
+    "@types/node": "^22.20.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "playwright-core": "^1.64.0",
+    "typescript": "^5.9.3",
+    "vitest": "^5.0.3"
+  }
+}

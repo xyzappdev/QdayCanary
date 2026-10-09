@@ -1,0 +1,30 @@
+{
+  "slot": 300000200,
+  "blockTime": 1760003600,
+  "meta": {
+    "err": null,
+    "fee": 5000,
+    "preBalances": [900000000, 1000000000, 1, 1141440],
+    "postBalances": [649995000, 1250000000, 1, 1141440],
+    "innerInstructions": [
+      { "index": 0, "instructions": [
+        { "program": "system", "programId": "11111111111111111111111111111111", "stackHeight": 2,
+          "parsed": { "type": "transfer", "info": { "source": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM", "destination": "AHiGL7feQqEko3yiDNCi7LJEviQKRbsT7joWn29zym9g", "lamports": 250000000 } } }
+      ] }
+    ]
+  },
+  "transaction": {
+    "signatures": ["innerSig1111111111111111111111111111111111111111111111111111111111111111111111111111"],
+    "message": {
+      "accountKeys": [
+        { "pubkey": "9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM", "signer": true, "writable": true, "source": "transaction" },
+        { "pubkey": "AHiGL7feQqEko3yiDNCi7LJEviQKRbsT7joWn29zym9g", "signer": false, "writable": true, "source": "lookupTable" },
+        { "pubkey": "11111111111111111111111111111111", "signer": false, "writable": false, "source": "transaction" },
+        { "pubkey": "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB4T", "signer": false, "writable": false, "source": "transaction" }
+      ],
+      "instructions": [
+        { "programId": "4Nd1mBQtrMJVYVfKf2PJy9NZUZdTAsp7D4xWLs4gDB4T", "accounts": ["9WzDXwBbmkg8ZTbNMqUxvQRAyrZzDsGYdLVL9zYtAWWM", "AHiGL7feQqEko3yiDNCi7LJEviQKRbsT7joWn29zym9g"], "data": "3Bxs4h24hBtQy9rw", "stackHeight": null }
+      ]
+    }
+  }
+}
