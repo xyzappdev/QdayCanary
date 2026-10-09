@@ -184,14 +184,21 @@ function FedBy({ state, teamWallet }: { state: CanaryState | null; teamWallet: s
   );
 }
 
-/** "From the team: X SOL in N transfers." Counts every transfer the site has read, not only the 10 shown. */
-function TeamLine({ team, teamWallet, truncated }: { team: { sol: number; count: number }; teamWallet: string; truncated: boolean }) {
+/**
+ * "From the team: X SOL in N transfers." Counts every transfer the site has read, not only the 10 shown.
+ * While the window is not fully parsed yet the sum is a lower bound: "at least …. Still reading history."
+ */
+function TeamLine({ team, teamWallet, truncated }: { team: { sol: number; count: number; complete: boolean }; teamWallet: string; truncated: boolean }) {
   const link = (text: string) => <a href={solscanAccount(teamWallet)} {...ext}>{text}</a>;
   const scope = truncated ? ' in the newest 1,000 transactions' : '';
+  const transfers = `${team.count} ${team.count === 1 ? 'transfer' : 'transfers'}`;
+  if (!team.complete) {
+    return <p className="sub">From {link('the team')}: at least {fmtSol(team.sol)} SOL in {transfers}{scope}. Still reading history.</p>;
+  }
   if (team.count === 0) {
     return <p className="sub">{link('The team')} has not sent anything {truncated ? scope.trim() : 'yet'}.</p>;
   }
-  return <p className="sub">From {link('the team')}: {fmtSol(team.sol)} SOL in {team.count} {team.count === 1 ? 'transfer' : 'transfers'}{scope}.</p>;
+  return <p className="sub">From {link('the team')}: {fmtSol(team.sol)} SOL in {transfers}{scope}.</p>;
 }
 
 function Plate({ status, aliveSince, dropping }: { status: CanaryState['status'] | null; aliveSince: string | null; dropping: boolean }) {

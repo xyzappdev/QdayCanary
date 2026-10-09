@@ -243,7 +243,7 @@ export async function computeCanaryState(d: Deps): Promise<CanaryState> {
     historyTruncated,
     balanceDropUnresolved,
     feesWaitingSol,
-    fromTeam: d.feesCreator ? teamTotal(c.credits, d.feesCreator) : null,
+    fromTeam: d.feesCreator ? { ...teamTotal(c.credits, d.feesCreator), complete: allParsed } : null,
     checkedAt: new Date(now()).toISOString(),
   };
 }

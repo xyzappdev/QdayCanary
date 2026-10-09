@@ -25,14 +25,14 @@ async function compute(): Promise<CanaryState> {
 }
 
 /** Shared by the page and /api/canary: at most one RPC refresh per 30 s. */
-export const getCanaryState = unstable_cache(compute, ['canary-state-v4', CANARY_ADDRESS], {
+export const getCanaryState = unstable_cache(compute, ['canary-state-v5', CANARY_ADDRESS], {
   revalidate: 30,
   tags: ['canary'],
 });
 
 // The OG image is cached for 5 minutes. A 30 s entry inside it would pull the image's
 // revalidate down to 30 s, so it has its own entry.
-const getCanaryStateForOg = unstable_cache(compute, ['canary-state-og-v4', CANARY_ADDRESS], {
+const getCanaryStateForOg = unstable_cache(compute, ['canary-state-og-v5', CANARY_ADDRESS], {
   revalidate: 300,
   tags: ['canary'],
 });

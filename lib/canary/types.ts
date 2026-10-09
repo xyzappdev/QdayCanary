@@ -34,8 +34,12 @@ export type CanaryState = {
   balanceDropUnresolved: boolean;
   /** Unclaimed creator fees of the team wallet, in SOL. Null if RPC could not be read. */
   feesWaitingSol: number | null;
-  /** Transfers from the team wallet among every transfer read. Null when no team wallet is set. */
-  fromTeam: { sol: number; count: number } | null;
+  /**
+   * Transfers from the team wallet among every transfer read. Null when no team wallet is set.
+   * `complete` is false while some transactions in the window are not parsed yet (at most 100 per
+   * refresh), so the sum is a lower bound until then.
+   */
+  fromTeam: { sol: number; count: number; complete: boolean } | null;
   checkedAt: string;
 };
 

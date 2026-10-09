@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
 import { SiteFooter, SiteHeader } from '@/components/SiteChrome';
-import { CANARY_ADDRESS, CANARY_PHRASE, REPO_URL } from '@/lib/constants';
+import { CANARY_ADDRESS, CANARY_PHRASE, REPO_URL, solscanAccount } from '@/lib/constants';
 
 // Static: no RPC, no API. Text only.
 export const dynamic = 'force-static';
@@ -115,7 +115,7 @@ export default function HowItWorks() {
           </ul>
           <p>Both are impossible without a valid signature for the canary&apos;s key. On Solana, SOL leaves a wallet only in a transaction that wallet signed.</p>
           <p>Some things do not count. Anyone can send SOL in. Anyone can mention the address in a transaction of their own. Neither needs the key, so neither kills the canary.</p>
-          <p>Only finalized transactions are used, so the result cannot be rolled back. When the site sees the balance fall, it first says that it is checking, finds the exact transaction, and only then says dead.</p>
+          <p>Only finalized transactions are used, so the result cannot be rolled back. The site says dead only when it has the exact transaction. If the balance has fallen and that transaction is still being searched for, the site says that it is checking and shows a warning.</p>
         </Part>
 
         <Part n={7}>
@@ -127,7 +127,7 @@ export default function HowItWorks() {
 
         <Part n={8}>
           <p>Anyone can send SOL to the canary. It cannot come back.</p>
-          <p>The coin adds a steady source. Creator fees from trading go to the team wallet, which is a normal wallet with a private key. The team sends half of them on to the canary by hand. This is a promise, not code. You can check it: every transfer into the canary is listed under <Link href="/#fed-by">Fed by</Link> on the <Link href="/">main page</Link> with a link to the transaction, and transfers from the team wallet are marked team.</p>
+          <p>The coin adds a steady source. Creator fees from trading go to the team wallet, which is a normal wallet with a private key. The team sends half of them on to the canary by hand. This is a promise, not code. You can check it. The latest transfers into the canary are listed under <Link href="/#fed-by">Fed by</Link> on the <Link href="/">main page</Link> with links to the transactions, transfers from the team wallet are marked team, and a line above the list adds up what the team has sent. The full history is on <a href={solscanAccount(CANARY_ADDRESS)} {...ext}>Solscan</a>.</p>
           <p>The coin does not protect any wallet. It pays for the bounty and for the team.</p>
         </Part>
 

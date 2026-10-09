@@ -22,7 +22,7 @@ export function SiteHeader({ status }: { status?: ReactNode }) {
 export function SiteFooter() {
   return (
     <footer>
-      Ed25519 is safe against every computer that exists today. Nobody knows when Q-Day comes, or if it does. SOL sent
+      Ed25519 is safe against every computer known today. Nobody knows when Q-Day comes, or if it does. SOL sent
       to the canary is unrecoverable. <a href={X_URL} {...ext}>{X_HANDLE} on X</a>
       {REPO_URL && <> · <a href={REPO_URL} {...ext}>GitHub</a></>}
     </footer>

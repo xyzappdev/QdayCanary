@@ -101,10 +101,26 @@ describe('computeCanaryState', () => {
       txs: makeTxSource(rpc, C), sleep: async () => {}, log: () => {},
     });
     expect(s.feeds).toHaveLength(10);
-    expect(s.fromTeam).toEqual({ sol: 15, count: 15 });
+    expect(s.fromTeam).toEqual({ sol: 15, count: 15, complete: true });
 
     const other = await run(chain(txs, [{ lamports: 15e9, slot: 200 }]), memStore().store);
     expect(other.fromTeam).toBeNull(); // no team wallet configured
+  });
+
+  it('fromTeam is a lower bound while the window is not fully parsed', async () => {
+    const txs: Tx[] = [];
+    for (let i = 0; i < 15; i++) txs.push({ sig: `t${i}`, slot: 100 + i, pre: i * 1e9, post: (i + 1) * 1e9 });
+    const rpc = chain(txs, [{ lamports: 15e9, slot: 200 }]);
+    const memo = new Map();
+    const refresh = () => computeCanaryState({
+      address: C, rpc, store: memStore().store, memory: {}, feesCreator: S,
+      txs: makeTxSource(rpc, C, { budget: 6, memo }), sleep: async () => {}, log: () => {},
+    });
+    const first = await refresh();
+    expect(first.fromTeam).toEqual({ sol: 6, count: 6, complete: false });
+    await refresh(); // 6 more from RPC, 6 from memory
+    const third = await refresh();
+    expect(third.fromTeam).toEqual({ sol: 15, count: 15, complete: true });
   });
 
   it('a recorded death_tx means dead, whatever RPC says', async () => {
