@@ -107,7 +107,6 @@ Then open http://localhost:3000.
 
 | Variable | Needed | What it does |
 |---|---|---|
-| `TOKEN_CA` | always | The coin's contract address. `.env.example` holds a placeholder that production builds refuse. |
 | `TOKEN_TICKER` | always | The coin's ticker. |
 | `TEAM_WALLET` | on production | The team wallet. Without it the site hides the team marks and shows a dash for unclaimed fees. |
 | `SOLANA_RPC_URL` | recommended | A mainnet RPC endpoint. The public one works but is slow. |
