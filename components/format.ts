@@ -37,3 +37,21 @@ export function plate(status: Status | null, aliveSince: string | null, now: num
   if (status === 'alive') return aliveSince ? `Alive · day ${dayNumber(aliveSince, now)}` : 'Alive';
   return 'Status unavailable';
 }
+
+export type TeamTotalView = { sol: number; count: number; complete: boolean };
+
+/**
+ * The "From the team" line in three parts: text before the link, the linked words, text after.
+ * Counts every transfer the site has read, not only the 10 shown. While the window is not fully
+ * parsed yet the sum is a lower bound.
+ */
+export function teamLineParts(team: TeamTotalView, truncated: boolean): [string, string, string] {
+  const scope = truncated ? ' in the newest 1,000 transactions' : '';
+  const transfers = `${team.count} ${team.count === 1 ? 'transfer' : 'transfers'}`;
+  if (!team.complete) {
+    if (team.count === 0) return ['From ', 'the team', ': nothing found yet. Still reading history.'];
+    return ['From ', 'the team', `: at least ${fmtSol(team.sol)} SOL in ${transfers}${scope}. Still reading history.`];
+  }
+  if (team.count === 0) return ['', 'The team', ` has not sent anything ${truncated ? scope.trim() : 'yet'}.`];
+  return ['From ', 'the team', `: ${fmtSol(team.sol)} SOL in ${transfers}${scope}.`];
+}

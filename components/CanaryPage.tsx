@@ -8,7 +8,7 @@ import { CANARY_PHRASE, Ed } from '@/lib/ed25519';
 import { BuildYourself } from './BuildYourself';
 import { Cage } from './Cage';
 import { CopyButton } from './CopyButton';
-import { DROP_LABEL, DROP_WARNING, fmtDuration, fmtSol, fmtTime, plate, short } from './format';
+import { DROP_LABEL, DROP_WARNING, fmtDuration, fmtSol, fmtTime, plate, short, teamLineParts, type TeamTotalView } from './format';
 import { Bounty, Faq, TokenSection, Why } from './Sections';
 import { SiteFooter, SiteHeader } from './SiteChrome';
 
@@ -184,21 +184,10 @@ function FedBy({ state, teamWallet }: { state: CanaryState | null; teamWallet: s
   );
 }
 
-/**
- * "From the team: X SOL in N transfers." Counts every transfer the site has read, not only the 10 shown.
- * While the window is not fully parsed yet the sum is a lower bound: "at least …. Still reading history."
- */
-function TeamLine({ team, teamWallet, truncated }: { team: { sol: number; count: number; complete: boolean }; teamWallet: string; truncated: boolean }) {
-  const link = (text: string) => <a href={solscanAccount(teamWallet)} {...ext}>{text}</a>;
-  const scope = truncated ? ' in the newest 1,000 transactions' : '';
-  const transfers = `${team.count} ${team.count === 1 ? 'transfer' : 'transfers'}`;
-  if (!team.complete) {
-    return <p className="sub">From {link('the team')}: at least {fmtSol(team.sol)} SOL in {transfers}{scope}. Still reading history.</p>;
-  }
-  if (team.count === 0) {
-    return <p className="sub">{link('The team')} has not sent anything {truncated ? scope.trim() : 'yet'}.</p>;
-  }
-  return <p className="sub">From {link('the team')}: {fmtSol(team.sol)} SOL in {transfers}{scope}.</p>;
+/** The "From the team" line; its wording lives in teamLineParts. */
+function TeamLine({ team, teamWallet, truncated }: { team: TeamTotalView; teamWallet: string; truncated: boolean }) {
+  const [before, linked, after] = teamLineParts(team, truncated);
+  return <p className="sub">{before}<a href={solscanAccount(teamWallet)} {...ext}>{linked}</a>{after}</p>;
 }
 
 function Plate({ status, aliveSince, dropping }: { status: CanaryState['status'] | null; aliveSince: string | null; dropping: boolean }) {
