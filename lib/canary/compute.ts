@@ -1,4 +1,4 @@
-import { bisectDebit, classify, FEEDS_SHOWN, isCredit, isDeath, LAMPORTS_PER_SOL, parseTx, toFeed } from './classify';
+import { bisectDebit, classify, FEEDS_SHOWN, isCredit, isDeath, LAMPORTS_PER_SOL, parseTx, teamTotal, toFeed } from './classify';
 import { fetchFeesWaitingSol } from './fees';
 import { pool, type Rpc } from './rpc';
 import type { CanaryState, Observation, SigInfo, Stored, TxRecord } from './types';
@@ -49,7 +49,7 @@ export type Deps = {
   rpc: Rpc;
   txs: TxSource;
   store: Store;
-  /** Creator whose unclaimed pump.fun fees are reported as feesWaitingSol. */
+  /** The team wallet: its unclaimed pump.fun fees are feesWaitingSol, its transfers in are fromTeam. */
   feesCreator?: string;
   /** Last balance seen by this instance, and when to look for the first feed again. */
   memory: { last?: Observation; nextBirthSearch?: number };
@@ -141,7 +141,7 @@ export async function computeCanaryState(d: Deps): Promise<CanaryState> {
       return {
         address: addr, status: 'dead', balanceSol: bal ? bal.lamports / LAMPORTS_PER_SOL : null,
         aliveSince: stored.aliveSince, feeds: [], deathTx: stored.deathTx,
-        historyTruncated: false, balanceDropUnresolved: false, feesWaitingSol, checkedAt: new Date(now()).toISOString(),
+        historyTruncated: false, balanceDropUnresolved: false, feesWaitingSol, fromTeam: null, checkedAt: new Date(now()).toISOString(),
       };
     }
     throw new Error('Solana RPC unavailable');
@@ -243,6 +243,7 @@ export async function computeCanaryState(d: Deps): Promise<CanaryState> {
     historyTruncated,
     balanceDropUnresolved,
     feesWaitingSol,
+    fromTeam: d.feesCreator ? teamTotal(c.credits, d.feesCreator) : null,
     checkedAt: new Date(now()).toISOString(),
   };
 }

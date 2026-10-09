@@ -1,5 +1,6 @@
 import { CopyButton } from './CopyButton';
-import { REPO_URL, solscanToken, X_HANDLE, X_URL } from '@/lib/constants';
+import Link from 'next/link';
+import { solscanToken, X_HANDLE, X_URL } from '@/lib/constants';
 
 const ext = { target: '_blank', rel: 'noopener noreferrer' } as const;
 
@@ -12,6 +13,7 @@ export function Why() {
         <div><h3>Any program can read the balance</h3><p>A contract can read this account&apos;s balance and compare it with the last value it stored. No oracle, no committee.</p></div>
         <div><h3>So a drop is proof</h3><p>If the balance falls, someone produced a signature for a key that was never made. The curve is broken and every program can react.</p></div>
       </div>
+      <p className="sub">Want the long version? <Link href="/how-it-works">Read how it works.</Link></p>
     </section>
   );
 }
@@ -62,15 +64,5 @@ export function Faq() {
         <details><summary>Is this a new idea?</summary><p>No. BitMEX Research proposed a canary fund for Bitcoin, where it needs a soft fork. On Solana a program can already read the canary&apos;s balance, so nothing in the protocol has to change.</p></details>
       </div>
     </section>
-  );
-}
-
-export function Footer() {
-  return (
-    <footer>
-      Ed25519 is safe against every computer that exists today. Nobody knows when Q-Day comes, or if it does. SOL sent
-      to the canary is unrecoverable. <a href={X_URL} {...ext}>{X_HANDLE} on X</a>
-      {REPO_URL && <> · <a href={REPO_URL} {...ext}>Source</a></>}
-    </footer>
   );
 }

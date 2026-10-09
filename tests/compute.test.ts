@@ -91,6 +91,22 @@ describe('computeCanaryState', () => {
     expect(writes).toContainEqual({ op: 'create', key: 'death_tx', value: 'd1' });
   });
 
+  it('fromTeam counts every team transfer read, not only the 10 feeds shown', async () => {
+    const txs: Tx[] = [];
+    for (let i = 0; i < 15; i++) txs.push({ sig: `t${i}`, slot: 100 + i, pre: i * 1e9, post: (i + 1) * 1e9 });
+    const { store } = memStore();
+    const rpc = chain(txs, [{ lamports: 15e9, slot: 200 }]);
+    const s = await computeCanaryState({
+      address: C, rpc, store, memory: {}, feesCreator: S,
+      txs: makeTxSource(rpc, C), sleep: async () => {}, log: () => {},
+    });
+    expect(s.feeds).toHaveLength(10);
+    expect(s.fromTeam).toEqual({ sol: 15, count: 15 });
+
+    const other = await run(chain(txs, [{ lamports: 15e9, slot: 200 }]), memStore().store);
+    expect(other.fromTeam).toBeNull(); // no team wallet configured
+  });
+
   it('a recorded death_tx means dead, whatever RPC says', async () => {
     const { store } = memStore({ deathTx: 'recorded' });
     const s = await run(chain([{ sig: 'f1', slot: 100, pre: 0, post: 2e9 }], [{ lamports: 2e9, slot: 150 }]), store);

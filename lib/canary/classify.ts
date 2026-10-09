@@ -112,6 +112,18 @@ export function classify(input: {
   return { status, death, firstCredit, credits };
 }
 
+export type TeamTotal = { sol: number; count: number };
+
+/**
+ * Sum of incoming transfers sent by `wallet`, over every record the site has read (not only the
+ * feeds shown). Uses the sender found by parseTx.
+ */
+export function teamTotal(credits: TxRecord[], wallet: string): TeamTotal {
+  const mine = credits.filter((r) => isCredit(r) && r.from === wallet);
+  const lamports = mine.reduce((sum, r) => sum + (r.post - r.pre), 0);
+  return { sol: lamports / LAMPORTS_PER_SOL, count: mine.length };
+}
+
 export const toFeed = (r: TxRecord): Feed => ({
   from: r.from,
   amountSol: (r.post - r.pre) / LAMPORTS_PER_SOL,

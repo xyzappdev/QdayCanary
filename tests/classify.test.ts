@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { bisectDebit, classify, parseTx, type RawTx } from '@/lib/canary/classify';
+import { bisectDebit, classify, parseTx, teamTotal, type RawTx } from '@/lib/canary/classify';
 import { CANARY_ADDRESS as C } from '@/lib/constants';
 import type { TxRecord } from '@/lib/canary/types';
 import funding from './fixtures/funding.json';
@@ -143,5 +143,26 @@ describe('bisectDebit', () => {
     });
     expect(i).toBe(at);
     expect(calls).toBeLessThanOrEqual(18);
+  });
+});
+
+describe('teamTotal', () => {
+  const TEAM = 'US517G5965aydkZ46HS38QLi7UQiSojurfbQfKCELFx'; // test-only address
+  const credit = (sig: string, from: string | null, lamports: number, slot = 1): TxRecord =>
+    ({ signature: sig, slot, blockTime: null, failed: false, signer: false, pre: 0, post: lamports, from });
+
+  it('sums only transfers from the team wallet', () => {
+    const records = [credit('a', TEAM, 1_500_000_000), credit('b', SENDER, 9_000_000_000), credit('c', TEAM, 500_000_000), credit('d', null, 1)];
+    expect(teamTotal(records, TEAM)).toEqual({ sol: 2, count: 2 });
+  });
+
+  it('nothing from the team', () => {
+    expect(teamTotal([credit('a', SENDER, 1_000_000_000)], TEAM)).toEqual({ sol: 0, count: 0 });
+    expect(teamTotal([], TEAM)).toEqual({ sol: 0, count: 0 });
+  });
+
+  it('ignores records that are not incoming transfers', () => {
+    const debitFromTeam: TxRecord = { ...credit('x', TEAM, 0), pre: 5, post: 0 };
+    expect(teamTotal([debitFromTeam, MENTION], TEAM)).toEqual({ sol: 0, count: 0 });
   });
 });

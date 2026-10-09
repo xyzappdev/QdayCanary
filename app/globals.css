@@ -102,6 +102,7 @@ footer{font-size:.85rem;color:var(--muted);max-width:76ch}
 /* Additions for the live page, in the same vocabulary. */
 .top-r{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
 a.tag{text-decoration:none}
+a.mark{text-decoration:none}
 a.tag:hover{background:var(--ink);color:var(--ground)}
 .addr a{color:var(--code-ink)}
 .alert{margin:0;background:var(--dead);color:var(--ground);font-weight:600;padding:12px 14px}
@@ -138,3 +139,23 @@ a.tag:hover{background:var(--ink);color:var(--ground)}
 .feeds .amt{font-weight:700;text-align:right}
 .feeds .meta{grid-column:1/-1;color:var(--muted);font-size:.75rem;display:flex;flex-wrap:wrap;gap:4px 14px}
 .feeds .who{overflow-wrap:anywhere}
+/* How it works: one reading column, big section numbers like the build steps. */
+a.btn{text-decoration:none;display:inline-block}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.doc{max-width:720px;display:flex;flex-direction:column;gap:40px}
+.doc-head{display:flex;flex-direction:column;gap:20px}
+.doc-head .lede{max-width:none}
+.toc{margin:0;padding:14px 0 0 1.6em;border-top:2px solid var(--rule);columns:2 260px;column-gap:40px;font-weight:500}
+.toc li{margin-bottom:4px;break-inside:avoid}
+.toc li::marker{font-family:var(--f-mono);font-size:.8em}
+.doc-part{display:grid;grid-template-columns:3.4rem minmax(0,1fr);gap:4px 14px;border-top:2px solid var(--rule);padding-top:16px;scroll-margin-top:16px}
+.doc-num{font-family:var(--f-display);font-size:2.6rem;line-height:1}
+.doc-body{min-width:0;display:flex;flex-direction:column;gap:14px}
+.doc-body p{margin:0}
+.doc-body h2{margin-bottom:2px}
+.doc-steps,.doc-list{margin:0;padding-left:1.4em;display:flex;flex-direction:column;gap:10px}
+.doc-steps li::marker{font-family:var(--f-display)}
+.doc-mono{display:block;margin-top:8px;font-family:var(--f-mono);font-size:.82rem;background:var(--panel);padding:8px 10px;overflow-wrap:anywhere}
+.doc-pre{margin:8px 0 0;font-family:var(--f-mono);font-size:.82rem;background:var(--code-bg);color:var(--code-ink);padding:12px 14px;overflow-x:auto;white-space:pre}
+.doc .btns{margin-top:6px}
+@media (max-width:760px){ .doc-part{grid-template-columns:2.4rem minmax(0,1fr);gap:4px 10px} .doc-num{font-size:2rem} }

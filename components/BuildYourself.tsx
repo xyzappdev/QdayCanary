@@ -97,7 +97,7 @@ export function BuildYourself() {
   const yours = d && used !== CANARY_PHRASE;
 
   return (
-    <section>
+    <section id="build">
       <h2>Do not take our word for it. Build the wallet yourself.</h2>
       <p className="sub">Every step below runs in your browser. There is no step where a secret goes in, so there is no secret to come out. Change one letter of the sentence and you get a different wallet.{REPO_URL && <> <a href={`${REPO_URL}/blob/main/lib/ed25519.ts`} target="_blank" rel="noopener noreferrer">Read the code</a>.</>}</p>
       <form className="phrase" onSubmit={(e) => { e.preventDefault(); run(phrase); }}>
@@ -118,7 +118,7 @@ export function BuildYourself() {
           </code>
         </div></li>
         <li className={step(2)}><div className="body"><h3>Read the 32 bytes as a curve point</h3><p>A point picked by a hash. Nobody chose it, so nobody knows the number that produces it.</p><code>{d ? 'valid point, encoded as ' + Ed.hex(d.digest) : '…'}</code></div></li>
-        <li className={step(3)}><div className="body"><h3>Multiply the point by 8</h3><p>This moves it into the subgroup where signatures live. Skip this step and the wallet could be unspendable even for a quantum computer.</p><code>{d ? Ed.hex(d.bytes) : '…'}</code></div></li>
+        <li className={step(3)}><div className="body"><h3>Multiply the point by 8</h3><p>This moves it into the group where every real public key lives. Without this step the address would not be a normal public key, and nobody could be sure it can ever be opened.</p><code>{d ? Ed.hex(d.bytes) : '…'}</code></div></li>
         <li className={step(4)}><div className="body"><h3>Write it in Base58</h3><p>That is the Solana address.</p><code>{d ? d.address : '…'}</code></div></li>
       </ol>
 

@@ -34,6 +34,8 @@ export type CanaryState = {
   balanceDropUnresolved: boolean;
   /** Unclaimed creator fees of the team wallet, in SOL. Null if RPC could not be read. */
   feesWaitingSol: number | null;
+  /** Transfers from the team wallet among every transfer read. Null when no team wallet is set. */
+  fromTeam: { sol: number; count: number } | null;
   checkedAt: string;
 };
 

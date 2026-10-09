@@ -3,13 +3,14 @@
 import { useEffect, useState } from 'react';
 import type { CanaryState } from '@/lib/canary/types';
 import type { Token } from '@/lib/token';
-import { CANARY_ADDRESS, solscanAccount, solscanTx, X_HANDLE, X_URL } from '@/lib/constants';
+import { CANARY_ADDRESS, solscanAccount, solscanTx } from '@/lib/constants';
 import { CANARY_PHRASE, Ed } from '@/lib/ed25519';
 import { BuildYourself } from './BuildYourself';
 import { Cage } from './Cage';
 import { CopyButton } from './CopyButton';
 import { DROP_LABEL, DROP_WARNING, fmtDuration, fmtSol, fmtTime, plate, short } from './format';
-import { Bounty, Faq, Footer, TokenSection, Why } from './Sections';
+import { Bounty, Faq, TokenSection, Why } from './Sections';
+import { SiteFooter, SiteHeader } from './SiteChrome';
 
 const POLL_MS = 30_000;
 const ext = { target: '_blank', rel: 'noopener noreferrer' } as const;
@@ -52,13 +53,7 @@ export function CanaryPage({ initial, token, teamWallet }: { initial: CanaryStat
 
   return (
     <div className={ash ? 'wrap is-dead' : 'wrap'}>
-      <header className="top">
-        <div className="mark">Q-Day Canary</div>
-        <div className="top-r">
-          <Plate status={status} aliveSince={state?.aliveSince ?? null} dropping={dropping} />
-          <a className="tag" href={X_URL} {...ext}>{X_HANDLE} on X</a>
-        </div>
-      </header>
+      <SiteHeader status={<Plate status={status} aliveSince={state?.aliveSince ?? null} dropping={dropping} />} />
 
       <section className={feedShown ? 'hero feed-open' : 'hero'}>
         <div className="hero-copy">
@@ -150,7 +145,7 @@ export function CanaryPage({ initial, token, teamWallet }: { initial: CanaryStat
       <TokenSection ca={token.ca} ticker={token.ticker} teamWallet={teamWallet} />
       <Bounty />
       <Faq />
-      <Footer />
+      <SiteFooter />
     </div>
   );
 }
@@ -158,8 +153,9 @@ export function CanaryPage({ initial, token, teamWallet }: { initial: CanaryStat
 function FedBy({ state, teamWallet }: { state: CanaryState | null; teamWallet: string | null }) {
   const feeds = state?.feeds ?? [];
   return (
-    <section>
+    <section id="fed-by">
       <h2>Fed by</h2>
+      {state && teamWallet && state.fromTeam && <TeamLine team={state.fromTeam} teamWallet={teamWallet} truncated={state.historyTruncated} />}
       {!state ? (
         <p className="sub">Could not reach Solana right now. This list will fill in on its own.</p>
       ) : feeds.length === 0 ? (
@@ -186,6 +182,16 @@ function FedBy({ state, teamWallet }: { state: CanaryState | null; teamWallet: s
       )}
     </section>
   );
+}
+
+/** "From the team: X SOL in N transfers." Counts every transfer the site has read, not only the 10 shown. */
+function TeamLine({ team, teamWallet, truncated }: { team: { sol: number; count: number }; teamWallet: string; truncated: boolean }) {
+  const link = (text: string) => <a href={solscanAccount(teamWallet)} {...ext}>{text}</a>;
+  const scope = truncated ? ' in the newest 1,000 transactions' : '';
+  if (team.count === 0) {
+    return <p className="sub">{link('The team')} has not sent anything {truncated ? scope.trim() : 'yet'}.</p>;
+  }
+  return <p className="sub">From {link('the team')}: {fmtSol(team.sol)} SOL in {team.count} {team.count === 1 ? 'transfer' : 'transfers'}{scope}.</p>;
 }
 
 function Plate({ status, aliveSince, dropping }: { status: CanaryState['status'] | null; aliveSince: string | null; dropping: boolean }) {
